@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    >
+
+    <ImageView
+        android:id="@+id/image_vp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <TextView
+        android:id="@+id/gradientbg"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@drawable/shapedrawable"
+        android:layout_alignParentBottom="true"
+        />
+
+
+    <TextView
+        android:id="@+id/hint_vp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+<!--    android:textColor="#FFFFFF"-->
+    <TextView
+        android:id="@+id/title_vp"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_above="@+id/hint_vp"
+        android:background="@color/cardview_shadow_end_color"
+        android:padding="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

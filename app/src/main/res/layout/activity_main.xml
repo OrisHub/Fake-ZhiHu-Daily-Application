@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/tb">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/TBday"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textSize="12sp"
+                android:id="@+id/TBmonth"
+                android:layout_below="@+id/TBday"
+                android:layout_marginLeft="0dp"
+                android:textColor="#000000"
+                android:layout_alignParentBottom="true"
+                />
+
+            <TextView
+                android:id="@+id/line"
+                android:layout_width="1dp"
+                android:layout_height="45dp"
+                android:background="@android:color/darker_gray"
+                android:layout_toEndOf="@+id/TBmonth"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="喵帕斯～"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_toRightOf="@+id/line"
+                android:layout_marginLeft="10dp"
+                />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--不套一层LinnerLayout就刷新不了-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>
