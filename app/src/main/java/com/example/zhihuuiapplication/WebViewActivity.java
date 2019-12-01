@@ -33,7 +33,7 @@ public class WebViewActivity extends AppCompatActivity {
         if (urls.size() == 5) {
             viewPager.setCurrentItem(position);
         } else {
-            viewPager.setCurrentItem(position + 3);
+            viewPager.setCurrentItem(position - 2);
         }
 
     }

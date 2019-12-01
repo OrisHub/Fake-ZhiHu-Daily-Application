@@ -137,11 +137,8 @@ public class ListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    for (int i = 0; i <= 4; i++) {
-                        bundle.putString("url" + i, orginBeans.get(1).getTop_stories().get(i).getUrl());
-                    }
-                    for (int i = 2; i <= storiesBeans.size() - 1; i++) {
-                        bundle.putString("url" + (i + 3), storiesBeans.get(i-1).getUrl());
+                    for (int i = 0; i <= storiesBeans.size() - 3; i++) {
+                        bundle.putString("url" + i, storiesBeans.get(i+1).getUrl());
                     }
                     bundle.putInt("position", position);
                     Intent intent = new Intent(context, WebViewActivity.class);
