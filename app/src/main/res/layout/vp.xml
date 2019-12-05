@@ -1,12 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical" android:layout_width="match_parent"
-android:layout_height="wrap_content">
+android:layout_height="300dp">
 
-<androidx.viewpager.widget.ViewPager
+    <androidx.viewpager.widget.ViewPager
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:id="@+id/vp"
     />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/vp5"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:text="·"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/vp4"
+        android:textAlignment="center"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/vp5"
+        android:text="·"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF" />
+    <TextView
+        android:id="@+id/vp3"
+        android:textAlignment="center"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/vp4"
+        android:text="·"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF" />
+    <TextView
+        android:id="@+id/vp2"
+        android:textAlignment="center"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/vp3"
+        android:text="·"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF" />
+    <TextView
+        android:id="@+id/vp1"
+        android:textAlignment="center"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/vp2"
+        android:text="·"
+        android:textSize="30sp"
+        android:textColor="#000000" />
+
+</RelativeLayout>

@@ -3,6 +3,7 @@ package com.example.zhihuuiapplication.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,20 +37,9 @@ public class ListAdapter extends RecyclerView.Adapter {
 
     public ListAdapter(Context context, List<Bean> beans) {
         this.context = context;
-        if (this.orginBeans.size() != 0) {
-            this.orginBeans.clear();
-        }
         this.orginBeans.addAll(beans);
         inflater = LayoutInflater.from(context);
-        if (this.storiesBeans.size() != 0) {
-            storiesBeans.clear();
-        }
         storiesBeans.addAll(beans.get(0).getStories());
-        if (beans.size() > 2) {
-            for (int i = 2; i <= beans.size() - 1; i++) {
-                storiesBeans.addAll(beans.get(i).getStories());
-            }
-        }
     }
 
     @Override
@@ -137,8 +127,11 @@ public class ListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    for (int i = 0; i <= storiesBeans.size() - 3; i++) {
-                        bundle.putString("url" + i, storiesBeans.get(i+1).getUrl());
+                    for (int i = 0; i <= 4; i++) {
+                        bundle.putString("url" + i, orginBeans.get(1).getTop_stories().get(i).getUrl());
+                    }
+                    for (int i = 2; i <= storiesBeans.size() - 1; i++) {
+                        bundle.putString("url" + (i + 3), storiesBeans.get(i-1).getUrl());
                     }
                     bundle.putInt("position", position);
                     Intent intent = new Intent(context, WebViewActivity.class);
@@ -162,15 +155,43 @@ public class ListAdapter extends RecyclerView.Adapter {
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         private final ViewPager viewPager;
-
+        private TextView[] tvs=new TextView[5];
         public HeaderViewHolder(View itemView) {
             super(itemView);
             viewPager = itemView.findViewById(R.id.vp);
+            tvs[0]=itemView.findViewById(R.id.vp1);
+            tvs[1]=itemView.findViewById(R.id.vp2);
+            tvs[2]=itemView.findViewById(R.id.vp3);
+            tvs[3]=itemView.findViewById(R.id.vp4);
+            tvs[4]=itemView.findViewById(R.id.vp5);
         }
 
         public void bindData(List<Bean.TopStoriesBean> vpBeans) {
             viewPager.setAdapter(new MyPagerAdapter(context, vpBeans));
             viewPager.setCurrentItem(40000);
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    int position_ture=position%5;
+                    for (int i=0;i<=4;i++){
+                        if(i==position_ture){
+                            tvs[i].setTextColor(Color.parseColor("#000000"));
+                        }else {
+                            tvs[i].setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
         }
     }
 
