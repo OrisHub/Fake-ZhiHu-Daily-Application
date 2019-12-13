@@ -48,4 +48,10 @@ public class WebViewPagerAdapter extends PagerAdapter {
         container.addView(view);
         return view;
     }
+
+    public void addUrl(String url){
+        urls.add(url);
+        notifyDataSetChanged();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.zhihuuiapplication.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,9 +31,9 @@ public class ListAdapter extends RecyclerView.Adapter {
     private List<Bean> orginBeans = new ArrayList<>();
     private List<Bean.StoriesBean> storiesBeans = new ArrayList<>();
     private final LayoutInflater inflater;
-    public final static int ITEM_TYPE_FAKE = -1;
-    public final static int ITEM_TYPE_HEADER = 0;
-    public final static int ITEM_TYPE_CARD = 1;
+    private final static int ITEM_TYPE_FAKE = -1;
+    private final static int ITEM_TYPE_HEADER = 0;
+    private final static int ITEM_TYPE_CARD = 1;
 
 
     public ListAdapter(Context context, List<Bean> beans) {
@@ -78,7 +79,7 @@ public class ListAdapter extends RecyclerView.Adapter {
         if (holder instanceof HeaderViewHolder) {
             ((HeaderViewHolder) holder).bindData(orginBeans.get(1).getTop_stories());
         } else if (holder instanceof FakeViewHolder) {
-            ((FakeViewHolder) holder).bindData(storiesBeans.get(0));
+            ((FakeViewHolder) holder).bindData();
         } else {
             ((CardViewHolder) holder).bindData(storiesBeans.get(position - 1), position);
         }
@@ -94,12 +95,13 @@ public class ListAdapter extends RecyclerView.Adapter {
     public class CardViewHolder extends RecyclerView.ViewHolder {
         private final CardView cardView;
 
-        public CardViewHolder(View itemView) {
+        CardViewHolder(View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.cv);
         }
 
-        public void bindData(Bean.StoriesBean bean, final int position) {
+        @SuppressLint("SetTextI18n")
+        void bindData(Bean.StoriesBean bean, final int position) {
             ImageView imageView = cardView.findViewById(R.id.image_rv);
             TextView tv_title = cardView.findViewById(R.id.title_rv);
             TextView tv_hint = cardView.findViewById(R.id.hint_rv);
@@ -127,13 +129,10 @@ public class ListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    for (int i = 0; i <= 4; i++) {
-                        bundle.putString("url" + i, orginBeans.get(1).getTop_stories().get(i).getUrl());
+                    for (int i = 0; i <= storiesBeans.size() - 3; i++) {
+                        bundle.putString("url" + (i), storiesBeans.get(i+1).getUrl());
                     }
-                    for (int i = 2; i <= storiesBeans.size() - 1; i++) {
-                        bundle.putString("url" + (i + 3), storiesBeans.get(i-1).getUrl());
-                    }
-                    bundle.putInt("position", position);
+                    bundle.putInt("position", position-2);
                     Intent intent = new Intent(context, WebViewActivity.class);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
@@ -143,12 +142,10 @@ public class ListAdapter extends RecyclerView.Adapter {
     }
 
     public class FakeViewHolder extends RecyclerView.ViewHolder {
-        public FakeViewHolder(View itemView) {
+        FakeViewHolder(View itemView) {
             super(itemView);
         }
-
-        public void bindData(Bean.StoriesBean bean) {
-
+        void bindData() {
         }
     }
 
@@ -156,7 +153,7 @@ public class ListAdapter extends RecyclerView.Adapter {
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         private final ViewPager viewPager;
         private TextView[] tvs=new TextView[5];
-        public HeaderViewHolder(View itemView) {
+        HeaderViewHolder(View itemView) {
             super(itemView);
             viewPager = itemView.findViewById(R.id.vp);
             tvs[0]=itemView.findViewById(R.id.vp1);
@@ -166,7 +163,7 @@ public class ListAdapter extends RecyclerView.Adapter {
             tvs[4]=itemView.findViewById(R.id.vp5);
         }
 
-        public void bindData(List<Bean.TopStoriesBean> vpBeans) {
+        void bindData(List<Bean.TopStoriesBean> vpBeans) {
             viewPager.setAdapter(new MyPagerAdapter(context, vpBeans));
             viewPager.setCurrentItem(40000);
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

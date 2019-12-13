@@ -1,10 +1,12 @@
 package com.example.zhihuuiapplication;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Calendar lastOnLordTime;
     private Boolean IF_THE_BLOCK_CLEARED=true;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tbDay=tb.findViewById(R.id.TBday);
         TextView tbMonth=tb.findViewById(R.id.TBmonth);
         tbDay.setText(getDate(0).substring(6));
-        final String num[] = {"壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖","拾","拾壹","拾贰"};
+        final String[] num = {"壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾", "拾壹", "拾贰"};
         tbMonth.setText(num[Integer.parseInt(getDate(0).substring(4,6))-1]+"月");
 
 
@@ -93,11 +96,24 @@ public class MainActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                totalItemCount = layoutManager.getItemCount();
-                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItem>=totalItemCount-1) {
-                    onLoadMore();
+                if (layoutManager != null) {
+                    totalItemCount = layoutManager.getItemCount();
+                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                    if (lastVisibleItem>=totalItemCount-1) {
+                        onLoadMore();
+                    }
+                }else {
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            Looper.prepare();
+                            Toast.makeText(MainActivity.this, "很抱歉,程序出现异常,即将退出.",
+                                    Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }
+                    }.start();
                 }
+
             }
 
             private void onLoadMore() {
@@ -116,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         initData();
     }
 
-    private void addData() {
+    public void addData() {
         getDataFromServer(root + getDate(k ),root + getDate(k+1 ),root + getDate(k+2 ));
         k += 3;
     }
@@ -125,23 +141,18 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         if (beans.size() == 1) {
             getDataFromServer("https://news-at.zhihu.com/api/4/news/latest",root + getDate(0),root + getDate(1));
+            k=2;
         }
 
     }
 
     private void refreshData() {
-        int items = beans.size();
         Bean bean0 = beans.get(0);
         beans.clear();
         beans.add(bean0);
         listAdapter.clearAll();
         listAdapter.addItems(bean0);
-        getDataFromServer("https://news-at.zhihu.com/api/4/news/latest",root + getDate(0),root + getDate(1));
-        if (items >= 5) {
-            for (int i = 2; i <= items - 3; i+=3) {
-                getDataFromServer(root + getDate(i),root + getDate(i+1),root + getDate(i+2));
-            }
-        }
+        initData();
     }
 
     private void getDataFromServer(final String url1,final String url2,final String url3) {
@@ -156,9 +167,16 @@ public class MainActivity extends AppCompatActivity {
                     Message message = handler.obtainMessage(1, data);
                     handler.sendMessage(message);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            Looper.prepare();
+                            Toast.makeText(MainActivity.this, "网络请求失败，请检查网络设置",
+                                    Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        }
+                    }.start();
                 }
-
             }
         }).start();
     }
@@ -168,8 +186,20 @@ public class MainActivity extends AppCompatActivity {
                 .url(url)
                 .build();
         Response response = client.newCall(request).execute();
-        assert response.body() != null;
-        return response.body().string();
+        if (response.body() != null) {
+            return response.body().string();
+        }else {
+            new Thread(){
+                @Override
+                public void run() {
+                    Looper.prepare();
+                    Toast.makeText(MainActivity.this, "网络请求异常，请检查网络设置",
+                            Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }.start();
+            return null;
+        }
     }
 
     Handler handler = new Handler(new Handler.Callback() {
@@ -197,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         c.setTime(new Date());
         c.add(Calendar.DAY_OF_MONTH, -otherdate);//otherdate天前的日子
         //将日期转化为20170520这样的格式
-        String date = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+        @SuppressLint("SimpleDateFormat") String date = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
         return date;
     }
 
